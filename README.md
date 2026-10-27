@@ -86,31 +86,39 @@ PaperWalk 把顺序固定为：
 
 ## Trial
 
-**先体验一个单元，再选择适合自己的方式。** 以下沿用[已有的带读示例](examples/guided-reading.md)，展示从原文到理解，再到调整教学方式的连续过程。示例使用[原创虚构短文](evals/fixtures/windowed-retrieval.md)，是为说明使用方式编写的演示，不是模型运行日志或真实科研结果。
+**先体验一个单元，再选择适合自己的方式。** 这里用《Attention Is All You Need》展示带读；这篇论文也是 PaperWalk 最初讨论精读方式时使用的材料。以下是整理后的教学示例，不是完整运行日志。[展开查看准备与分段说明](examples/guided-reading.md)。
+
+**阅读材料与参考文献：** Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). *Attention Is All You Need*. *Advances in Neural Information Processing Systems*, 30. [论文页面](https://arxiv.org/abs/1706.03762) · [阅读版本 PDF：v7](https://arxiv.org/pdf/1706.03762v7)（2023-08-02 修订；论文发表于 2017 年）。
 
 ### 1. 首个单元：原文 → 翻译 → 理解
 
-进入这一单元之前，讲解者应先完整研读正文、公式、结果表、两个附录与参考说明，并据此设计全篇分段。用户看到的是下面这个小单元；准备工作不会缩减为只读摘要。
+进入这一单元之前，讲解者必须先完整研读论文，包括正文、公式、图表及图注、附录和参考文献中的相关线索，再设计全篇分段。下面只展示首个教学单元，不把这几句话的阅读当作全文准备。
 
-**位置：摘要全文。这个小段说明作者研究什么，以及主张适用于什么范围。**
+**位置：PDF 第 1 页，摘要前三句。主题：从已有模型到 Transformer 的核心变化。**
 
 **原文**
 
-> We study a windowed retrieval model for a synthetic sequence task. On the fixed-length benchmark, the windowed model attains accuracy close to a dense model while evaluating fewer token pairs. We investigate the conditions under which this comparison remains useful.
+> The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.
 
 **翻译**
 
-我们研究了一种用于合成序列任务的窗口式检索模型。在固定长度的基准测试中，该模型在评估更少词元对的同时，取得了接近稠密模型的准确率。我们考察了这种比较在哪些条件下仍然有意义。
+主流的序列转换模型以复杂的循环神经网络或卷积神经网络为基础，并包含编码器和解码器。其中，性能最好的模型还通过注意力机制连接编码器与解码器。我们提出了一种新的、简洁的网络架构——Transformer，它完全基于注意力机制，不再使用循环结构和卷积。
 
 **理解**
 
-这段有三个连续动作：提出研究对象，给出一个有条件的结果，再表明要检查它的适用条件。
+第一句交代的是论文写作时的背景。序列转换可以理解为把一个序列变成另一个序列，例如把一句中文翻译成英文。编码器和解码器是功能分工，循环与卷积则是实现这些功能时采用的计算结构，二者不是同一层面的概念。
 
-“窗口式”意味着只在某个局部范围内查找信息；“稠密”模型在这项任务中可以访问所有更早位置。现在先理解这两个查找范围的区别，窗口的具体定义将在方法部分读到。
+第二句说明：**此前的模型已经使用注意力。** 因此，第三句的重点是让注意力承担更核心的序列建模作用，去掉循环和卷积，不能理解成“Transformer 第一次发明了注意力”。
 
-第二句有两个不能忽略的限定：结果来自固定长度的基准；减少的是被评估的词元对数。因此这里不能改写成“窗口模型在所有序列上都一样准确且运行更快”。原文后面的实验和附录会进一步解释这个边界。
+“完全基于注意力”也不能理解为网络里只剩注意力这一种运算。后文的架构还包括前馈网络、位置编码、残差连接等；这里强调的是序列中信息交互方式的变化。
 
-这不是让我们立刻判断哪种模型更好，而是提出一个要沿着全文核对的问题：当查找范围缩小，哪些信息还能被找到，哪些信息可能丢失？
+**为什么在这里分段？** 这三句完成了“已有架构 → 已有注意力 → 新架构”的连续论述；接下来摘要转向实验结果，适合另起一个单元。分段依据是意思的转折，而不是固定每三句一段。此处提出了方法主张，效果与效率还要到后面的实验中核对。
+
+**可选的理解题**
+
+> 这里的核心变化是“首次加入注意力”，还是“让注意力承担更核心的作用，从而去掉循环和卷积”？
+
+用户可以回答，也可以直接说“继续”。选择不提问时，这一项省略，基础讲解仍然保留。
 
 ### 2. 先体验，再选择
 
@@ -149,11 +157,11 @@ PaperWalk 把顺序固定为：
 
 ### 4. 自己试一轮
 
-想自己试读，可以提供自己的论文，或使用仓库内的虚构材料：
+下载上方链接的论文 PDF 并提供给宿主，或换成自己的论文，然后说：
 
-> 请用 `$paperwalk` 完整研读 `evals/fixtures/windowed-retrieval.md`，从摘要开始带我读一个单元，再让我选择是否保留提问、公式讲多细、每次读多少。
+> 请用 `$paperwalk` 完整研读我提供的《Attention Is All You Need》，先核查全文并设计语义分段，再从摘要开始带我读一个单元。之后让我选择是否保留提问、公式讲多细、每次读多少。
 
-**演示与验证分开记录。** 已完成的独立试读实际检查了首单元后设置、关闭提问后连续续读、公式与定义合讲等行为，也发现过需要改进的译法；32项自动测试检查的是记录与工具边界，不是32篇论文实测。具体结果、修订和未测范围见[验证记录](evals/validation-report.md)，后续测试方式见[行为验收](evals/cases.md)。
+**演示与验证分开记录。** 独立行为试读使用的是仓库内的[原创虚构测试材料](evals/fixtures/windowed-retrieval.md)，与上方真实论文展示分开。它实际检查了首单元后设置、关闭提问后连续续读、公式与定义合讲等行为，也发现过需要改进的译法；32项自动测试检查的是记录与工具边界，不是32篇论文实测。具体结果、修订和未测范围见[验证记录](evals/validation-report.md)，后续测试方式见[行为验收](evals/cases.md)。
 
 ## 安装与可移植性
 
