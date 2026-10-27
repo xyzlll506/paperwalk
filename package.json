@@ -1,0 +1,32 @@
+{
+  "name": "paperwalk",
+  "version": "0.1.1",
+  "description": "循文 · PaperWalk — full-paper preparation and guided reading with optional teaching modes.",
+  "type": "module",
+  "main": "./dsh/index.js",
+  "exports": {
+    ".": "./dsh/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dsh/", "cordis.patch.yml", "SKILL.md", "agents/", "references/",
+    "assets/", "scripts/check_readiness.py", "examples/", "evals/",
+    "docs/", "tests/*.js", "tests/*.py", "tests/fixtures/", "README.md"
+  ],
+  "scripts": {
+    "test": "node --test tests/dsh-plugin.test.js"
+  },
+  "engines": {
+    "node": ">=22",
+    "dsh": ">=0.2.1-rc.2 <0.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xyzlll506/paperwalk.git"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

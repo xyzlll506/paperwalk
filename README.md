@@ -165,6 +165,28 @@ PaperWalk 把顺序固定为：
 
 ## 安装与可移植性
 
+### dsh：通过插件管理安装
+
+在 dsh 的插件安装面板选择 Git 仓库，填写：
+
+```text
+https://github.com/xyzlll506/paperwalk
+```
+
+也可以使用命令行（桌面版通常使用 `desktop` profile；其他环境替换为实际名称）：
+
+```bash
+dsh plugin --profile desktop add "https://github.com/xyzlll506/paperwalk"
+```
+
+安装并启用后，在会话中说：“请用 paperwalk 精读这篇论文。”插件会向 dsh 的技能目录注册 `paperwalk`，原始入口仍是仓库根目录的 `SKILL.md`，配套资料仍按原来的相对路径读取。PDF 解析和视觉检查继续使用宿主工具。
+
+如果之前提示“这个包没有声明组合包”，请重新添加仓库，让安装器取得包含插件声明的新版本；升级 pnpm 不能解决旧版本缺少声明的问题。若安装完成后当前会话尚未发现技能，可重新打开会话，必要时重启 dsh。
+
+适配依据：dsh 的 [组合包声明](https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish) 与 [技能提供者接口](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md)。实际验证使用 `0.2.1-rc.2`；其他版本仍需验证。自定义 profile 需要已有的 `skills` 服务及技能调用工具。
+
+### Codex 与其他 Skill 宿主
+
 此仓库根目录就是一个 skill 文件夹。将整个目录复制为支持 `SKILL.md` 的宿主技能目录下的 `paperwalk/`，保留内部相对路径，再按宿主方式启用或调用。
 
 ```text
@@ -181,11 +203,14 @@ PaperWalk 把顺序固定为：
 
 核心教学流程不需要 Python。可选的记录检查器使用 Python 标准库，不自动阅读论文，也不替代 AI 的科学判断。没有 Python 时可以依照文档人工检查。
 
+dsh 包装层没有额外 npm 依赖、安装脚本或编译步骤；它只注册技能，不复制文件到其他宿主的技能目录。直接使用原有 Skill 的宿主无需执行 npm 或 pnpm。
+
 ## 仓库内容
 
 | 路径 | 用途 |
 | --- | --- |
 | [SKILL.md](SKILL.md) | 入口、固定要求、阶段顺序和选项路由 |
+| [dsh 插件入口](dsh/index.js) | 将同一份 Skill 注册到 dsh；由 `package.json` 与 `cordis.patch.yml` 声明加载 |
 | [完整研读](references/full-reading.md) | 完整范围、源单元、视觉核查和全文理解 |
 | [语义分段](references/segmentation.md) | 分段点、依赖、覆盖和调整原则 |
 | [可选教学](references/teaching.md) | 默认方式、偏好设置、提问和反馈 |
@@ -208,6 +233,10 @@ python scripts/check_readiness.py path/to/session.json
 python -m unittest discover -s tests -v
 ```
 
+dsh 包装层可用 `npm test` 检查技能正文与资源路径。若设置 `DSH_TEST_RUNTIME` 为一个已安装 dsh 的根 `package.json` 路径，同一测试还会使用该宿主的真实 Cordis 与技能注册表验证加载、同名技能优先级和卸载；未设置时明确跳过这项集成测试。桌面版的 ASAR 安装需要使用宿主支持 ASAR 的 Node 运行方式。
+
+维护 dsh 入口时，`SKILL.md` 的 `name` 保持普通 kebab-case，`description` 保持单行 JSON 双引号字符串；入口从这两个字段读取元数据，正文保持单一来源。插件源码无需构建，`npm pack --ignore-scripts` 可检查实际分发内容。实际已执行的检查见[验证记录](evals/validation-report.md)。
+
 空白模板故意不是“已准备好”的状态，不应通过教学准备检查。测试关注缺失材料、未读单元、分段遗漏和状态矛盾等边界。
 
 **检查通过不证明 AI 真的读完或理解了论文。** 工具只能核查所填记录的一致性。源清单本身是否完整、图表是否实际查看、解释是否科学准确，都需要模型依据真实材料完成并接受使用中的检验。
@@ -222,6 +251,6 @@ python -m unittest discover -s tests -v
 
 ## 版本与许可
 
-当前版本：`0.1.0`。这是可继续迭代的 skill 源码包，不包含对所有论文类型或 AI 宿主的性能保证。
+当前版本：`0.1.1`。这是可继续迭代的 skill 源码包，不包含对所有论文类型或 AI 宿主的性能保证。
 
 发布许可证尚未指定，由仓库维护者在正式发布前决定。不得将本说明理解为替原论文作者授予任何转载或再分发权利。
