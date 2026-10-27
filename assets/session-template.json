@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "paper": {
+    "title": "",
+    "version": "",
+    "identity": "",
+    "identity_verified": false
+  },
+  "inventory": {
+    "confirmed": false,
+    "supplements_checked": false
+  },
+  "sources": [
+    {
+      "id": "main",
+      "role": "main",
+      "required": true,
+      "location": "",
+      "sha256": null,
+      "availability": "available",
+      "inventory_complete": false,
+      "units": []
+    }
+  ],
+  "synthesis": {
+    "question": "",
+    "approach": "",
+    "result": "",
+    "boundary": "",
+    "understanding_checked": false,
+    "evidence": [],
+    "unresolved": []
+  },
+  "segments": [],
+  "preferences": {
+    "setup": "after_first_unit",
+    "configured": false,
+    "question_mode": "checkpoints",
+    "depth": "standard",
+    "formula_mode": "both",
+    "examples": true,
+    "pace": "one_unit",
+    "recaps": true
+  },
+  "progress": {
+    "taught_segments": [],
+    "deferred_segments": [],
+    "pending_question": null,
+    "known_concepts": [],
+    "next_action": "Read and verify all required sources before planning teaching units."
+  }
+}

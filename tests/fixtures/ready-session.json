@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "paper": {
+    "title": "A Small Windowed Lookup Study",
+    "version": "synthetic fixture 1",
+    "identity": "tests/fixtures/synthetic-paper.md; original fictional test material",
+    "identity_verified": true
+  },
+  "inventory": {
+    "confirmed": true,
+    "supplements_checked": true,
+    "note": "The full synthetic Markdown has eleven units, including its appendix and declaration. It defines no separate supplements."
+  },
+  "sources": [
+    {
+      "id": "main", "role": "main", "required": true,
+      "location": "tests/fixtures/synthetic-paper.md", "sha256": null,
+      "availability": "available", "inventory_complete": true,
+      "units": [
+        {"id": "title", "locator": "Title and version line", "kind": "frontmatter", "status": "read"},
+        {"id": "abstract", "locator": "Abstract, paragraph 1", "kind": "text", "status": "read"},
+        {"id": "method", "locator": "Method, paragraph 1", "kind": "text", "status": "read"},
+        {"id": "eq1", "locator": "Equation 1, complete formula and definitions", "kind": "equation", "status": "read", "notation_verified": true},
+        {"id": "fig1", "locator": "Figure 1, complete ASCII schematic", "kind": "figure", "status": "read", "visual_verified": true},
+        {"id": "fig1-caption", "locator": "Figure 1 caption, complete paragraph", "kind": "caption", "status": "read"},
+        {"id": "table1", "locator": "Table 1, complete header and both rows", "kind": "table", "status": "read", "visual_verified": true},
+        {"id": "discussion", "locator": "Discussion, paragraph 1", "kind": "text", "status": "read"},
+        {"id": "references", "locator": "References, full statement", "kind": "references", "status": "read"},
+        {"id": "appendix-a", "locator": "Appendix A, paragraph 1", "kind": "text", "status": "read"},
+        {"id": "declaration", "locator": "Declaration, complete paragraph", "kind": "declaration", "status": "read"}
+      ]
+    }
+  ],
+  "synthesis": {
+    "question": "Does a six-card window reduce examined candidates while retaining every target in the twelve constructed paired queries?",
+    "approach": "Compare full lookup of eighteen cards with windowed lookup of six cards on the same queries.",
+    "result": "Mean examined candidates decrease from eighteen to six, while hits decrease from twelve to eleven out of twelve.",
+    "boundary": "This fictional example measures candidate count, not runtime; a distant target is missed and no uncertainty or generalization is measured.",
+    "understanding_checked": true,
+    "evidence": [
+      {
+        "claim": "Fewer examined candidates come with a loss of one target in this example.",
+        "source_ids": ["method", "table1", "appendix-a"],
+        "interpretation": "A local restriction creates a measurable tradeoff here; it does not establish universal speed or accuracy improvements.",
+        "limits": "Twelve constructed queries, no measured runtime, no statistical inference, fictional data."
+      }
+    ],
+    "unresolved": []
+  },
+  "segments": [
+    {"id": "S0", "kind": "supporting", "focus": "Source identity", "split_reason": "Verify metadata without a separate language lesson", "source_ids": ["title"], "context_ids": [], "depends_on": []},
+    {"id": "S1", "kind": "teaching", "focus": "Question and qualified result", "split_reason": "The abstract is one complete contrast between cost and retrieval quality", "source_ids": ["abstract"], "context_ids": ["table1", "appendix-a"], "depends_on": []},
+    {"id": "S2", "kind": "teaching", "focus": "Paired comparison and cost definition", "split_reason": "Keep the experimental comparison with the candidate-count formula and definitions", "source_ids": ["method", "eq1"], "context_ids": [], "depends_on": ["S1"]},
+    {"id": "S3", "kind": "teaching", "focus": "Read the complete evidence", "split_reason": "Keep the schematic, its qualification and result table together", "source_ids": ["fig1", "fig1-caption", "table1"], "context_ids": ["method"], "depends_on": ["S2"]},
+    {"id": "S4", "kind": "teaching", "focus": "Boundary and failure case", "split_reason": "The discussion and appendix jointly explain the same failure condition", "source_ids": ["discussion", "appendix-a"], "context_ids": ["fig1", "table1"], "depends_on": ["S3"]},
+    {"id": "S5", "kind": "supporting", "focus": "Bibliographic and provenance checks", "split_reason": "Check the no-reference statement and fictional provenance without forcing a separate lesson", "source_ids": ["references", "declaration"], "context_ids": [], "depends_on": []}
+  ],
+  "preferences": {
+    "setup": "after_first_unit", "configured": false,
+    "question_mode": "checkpoints", "depth": "standard", "formula_mode": "both",
+    "examples": true, "pace": "one_unit", "recaps": true
+  },
+  "progress": {
+    "taught_segments": [], "deferred_segments": [], "pending_question": null,
+    "known_concepts": [], "next_action": "Teach S1, then offer a single preference adjustment."
+  }
+}

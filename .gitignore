@@ -1,0 +1,8 @@
+# Reader-owned sources and session data do not belong in the distributed skill.
+/reading-sessions/
+/local-papers/
+/tmp/
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db

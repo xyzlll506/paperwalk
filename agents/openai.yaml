@@ -1,0 +1,7 @@
+interface:
+  display_name: "循文 · PaperWalk"
+  short_description: "完整研读全文后按逻辑分段，提供原文翻译、深入解释与可选互动教学"
+  default_prompt: "请使用 $paperwalk 完整研读我提供的论文，再根据全文逻辑设计分段，逐段给出原文、翻译与理解；先示范一个单元，再让我选择教学方式。"
+
+policy:
+  allow_implicit_invocation: true
