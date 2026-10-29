@@ -157,6 +157,41 @@ class ReadinessTests(unittest.TestCase):
         self.state["progress"]["taught_segments"] = ["S999"]
         self.assert_blocked("unknown segment")
 
+    def test_taught_segment_cannot_also_be_deferred(self):
+        self.state["progress"]["taught_segments"] = ["S1"]
+        self.state["progress"]["deferred_segments"] = ["S1"]
+        self.assert_blocked("both taught and deferred: S1")
+
+    def test_distinct_taught_and_deferred_segments_are_allowed(self):
+        self.state["progress"]["taught_segments"] = ["S1"]
+        self.state["progress"]["deferred_segments"] = ["S2"]
+        self.assertEqual(readiness.check_readiness(self.state), [])
+
+    def test_all_progress_conflicts_are_reported_without_mutation(self):
+        self.state["progress"]["taught_segments"] = ["S2", "S1"]
+        self.state["progress"]["deferred_segments"] = ["S1", "S2"]
+        before = copy.deepcopy(self.state)
+        issues = readiness.check_readiness(self.state)
+        conflicts = [issue for issue in issues if "both taught and deferred" in issue]
+        self.assertEqual(conflicts, [
+            "progress: segment is both taught and deferred: S1",
+            "progress: segment is both taught and deferred: S2",
+        ])
+        self.assertEqual(self.state, before)
+
+    def test_cli_conflicting_progress_returns_not_ready(self):
+        self.state["progress"]["taught_segments"] = ["S1"]
+        self.state["progress"]["deferred_segments"] = ["S1"]
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "session.json"
+            path.write_text(json.dumps(self.state), encoding="utf-8")
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), str(path), "--json"],
+                capture_output=True, text=True,
+            )
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertEqual(json.loads(result.stdout)["status"], "NOT READY")
+
     def test_malformed_nested_values_do_not_crash(self):
         for key in ("sources", "synthesis", "segments", "preferences", "progress"):
             with self.subTest(key=key):
