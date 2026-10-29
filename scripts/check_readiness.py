@@ -226,10 +226,14 @@ def check_readiness(state):
         if type(preferences.get(key)) is not bool:
             issues.append(f"preferences.{key}: expected a boolean")
     progress = obj(state.get("progress"), "progress")
+    progress_ids = {}
     for key in ("taught_segments", "deferred_segments"):
-        for segment_id in ids(progress.get(key), f"progress.{key}"):
+        progress_ids[key] = set(ids(progress.get(key), f"progress.{key}"))
+        for segment_id in sorted(progress_ids[key]):
             if segment_id not in segment_ids:
                 issues.append(f"progress.{key}: unknown segment ID {segment_id}")
+    for segment_id in sorted(progress_ids["taught_segments"] & progress_ids["deferred_segments"]):
+        issues.append(f"progress: segment is both taught and deferred: {segment_id}")
     # Unanswered questions never block preparation or force a user to answer.
     return issues
 
